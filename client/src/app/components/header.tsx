@@ -17,12 +17,14 @@ import {
   ShieldCheckIcon,
   XCircleIcon,
   ShoppingBagIcon,
-  UserPlusIcon
+  UserPlusIcon,
+  MagnifyingGlassIcon
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
 import { HiShoppingCart, HiUser } from 'react-icons/hi'
 import NextLink from 'next/link'
 import Link from 'next/link';
+import SearchBox from './searchbox';
 
 const profileMenu = [
     { name: 'Profile Setting', description: 'You can update your data', href: '#', icon: UserCircleIcon },
@@ -46,21 +48,39 @@ const profileMenu = [
     { name: 'Checkout', href: '#', icon: ShoppingCartIcon },
   ]
   
-  function classNames(...classes) {
+  function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
   }
   
 export default function Header() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+    const [showAnotherComponent, setShowAnotherComponent] = useState(false);
+
+    const handleClick = () => {
+      setShowAnotherComponent(true);
+    };
+
+    const handleBack = () => {
+      setShowAnotherComponent(false);
+    };
+     const [isOpen, setIsOpen] = useState(false);
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  };
     return (
-      <header className="bg-white  shadow-sm sticky top-0 bg-opacity-70 backdrop-filter backdrop-blur-lg" style={{ position: "fixed", top: 0, left: 0, right: 0 }}>
-        <nav className="mx-auto flex max-w-7xl items-center justify-between lg:px-8" aria-label="Global">
+      <>
+       
+      <header className="bg-white  shadow-sm sticky top-0 bg-opacity-70 backdrop-filter backdrop-blur-lg  " style={{ position: "fixed", top: 0, left: 0, right: 0,zIndex: 9999  }}>
+        <nav className="mx-auto flex max-w-7xl items-center justify-between lg:px-8" aria-label="Global" >
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 ">
               {/* <span className="sr-only">Your Company</span> */}
               <img className="h-20 w-auto" src="/bimbiya.png" alt="Bimbiya" />
             </a>
           </div>
+          
           <div className="flex lg:hidden">
             <button
               type="button"
@@ -72,23 +92,34 @@ export default function Header() {
             </button>
           </div>
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
-  
-  <Link href="/foodcity-section">
-          <div className="flex items-center text-sm font-semibold leading-6 text-gray-900">
-  <HiShoppingCart className="w-6 h-6 text-black outline-none mr-2" /> Foodcity Section
-</div></Link>
+      
+              <Link href="/foodcity-section">
+                      <div className="flex items-center text-sm font-semibold leading-6 text-gray-900">
+              <HiShoppingCart className="w-6 h-6 text-black outline-none mr-2" /> Bimbiya Foodcity
+            </div></Link>
 
-<Link href="/bite">
+            <Link href="/bite">
             <div className=" flex items-center  text-sm font-semibold leading-6 text-gray-900">
-            <ShoppingBagIcon className="w-6 h-6 text-black outline-none mr-2" />Bite Section
+            <ShoppingBagIcon onClick={togglePopup} className="w-6 h-6 text-black outline-none mr-2" />Bimbiya Bite
             </div></Link>
           
-  
+
           </Popover.Group>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
   
             {/* add to cart section */}
   
+            {!showAnotherComponent ? (
+        <button onClick={handleClick} style={{ paddingRight: '15px' }}>
+          <MagnifyingGlassIcon className="w-6 h-6 text-black outline-none mr-2 transition-colors duration-300 ease-in-out group-hover:text-white-500" ></MagnifyingGlassIcon>
+        </button>
+      ) : (
+        <>
+        <SearchBox setShowAnotherComponent={setShowAnotherComponent} ></SearchBox>
+        </>
+       
+      )}
+
             <Popover className="relative">
               <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900 outline-none">
                 <a className="flex items-center mr-6 outline-none">
@@ -105,13 +136,16 @@ export default function Header() {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel className="absolute  shadow-xl  -right-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden bg-opacity-70 backdrop-filter backdrop-blur-lg rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                  <div className="p-4">
+                <Popover.Panel className="absolute  shadow-xl  -right-8 top-full z-10 mt-3 w-screen max-w-sm overflow-hidden backdrop-filter backdrop-blur-lg rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                  <div className="p-2 max-w-sm ">
                     {btnCartMenu.map((item) => (
+                      
                       <div
                         key={item.name}
-                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-5 "
+                        className="group relative flex items-center gap-x-6 rounded-lg text-sm leading-6 hover:bg-gray-5 "
+                        style={{ padding: '0.5rem' }}
                       >
+                        
                         <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg  outline-none">
                           <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600 outline-none" aria-hidden="true" />
                         </div>
@@ -125,7 +159,7 @@ export default function Header() {
                       </div>
                     ))}
                   </div>
-                  <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
+                  <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50 max-w-sm ">
                     {btnCartFooter.map((item) => (
                       <a
                         key={item.name}
@@ -159,33 +193,35 @@ export default function Header() {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel className="absolute -right-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden bg-opacity-70 backdrop-filter backdrop-blur-lg rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-                  <div className="p-4">
-                    {profileMenu.map((item) => (
-                      <div
-                        key={item.name}
-                        className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
-                      >
-                        <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg  group-hover:bg-white-100">
-                          <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
-                        </div>
-                        <div className="flex-auto">
-                          <a href={item.href} className="block font-semibold text-gray-900">
-                            {item.name}
-                            <span className="absolute inset-0" />
-                          </a>
-                          <p className="mt-1 text-gray-600">{item.description}</p>
-                        </div>
+                <Popover.Panel className="absolute -right-8 top-full z-10 mt-3 w-screen max-w-sm overflow-hidden  backdrop-filter backdrop-blur-lg rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+                <div className="p-2 max-w-sm">
+                  {profileMenu.map((item) => (
+                    <div
+                      key={item.name}
+                      className="group relative flex items-center gap-x-6 rounded-lg text-sm leading-6 hover:bg-gray-50"
+                      style={{ padding: '0.5rem' }}
+                    >
+                      <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg group-hover:bg-white-100">
+                        <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" />
                       </div>
-                    ))}
-                  </div>
-                  <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
+                      <div className="flex-auto">
+                        <a href={item.href} className="block font-semibold text-gray-900">
+                          {item.name}
+                          <span className="absolute inset-0" />
+                        </a>
+                        <p className="mt-1 text-gray-600">{item.description}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                  <div className="grid grid-cols-2 divide-x divide-gray-900/5 max-w-sm">
                     {profileMenuFooter.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
-                      >
+                         <a
+                         key={item.name}
+                         href={item.href}
+                         className="flex items-center justify-center gap-x-2.5 p-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
+                       >
                         <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
                         {item.name}
                       </a>
@@ -221,13 +257,13 @@ export default function Header() {
                     href="#"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    Foodcity Section
+                    Bimbiya Foodcity
                   </a>
                   <a
                     href="#"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    Bite Section
+                    Bimbiya Bite
                   </a>
                   {/* <a
                   href="#"
@@ -311,6 +347,9 @@ export default function Header() {
           </Dialog.Panel>
         </Dialog>
       </header>
+
+      
+      </>
     )
   }
   
