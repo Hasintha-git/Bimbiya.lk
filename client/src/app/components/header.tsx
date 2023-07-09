@@ -1,5 +1,6 @@
 "use client";
 import { Fragment, useState } from 'react'
+import { useRouter } from "next/navigation"
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import {
   ArrowPathIcon,
@@ -53,6 +54,8 @@ const profileMenu = [
   }
   
 export default function Header() {
+
+  const router = useRouter();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     const [showAnotherComponent, setShowAnotherComponent] = useState(false);
@@ -93,12 +96,13 @@ export default function Header() {
           </div>
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
       
-              <Link href="/foodcity-section">
+              <Link href="/foodcity-section/foodcity" >
                       <div className="flex items-center text-sm font-semibold leading-6 text-gray-900">
               <HiShoppingCart className="w-6 h-6 text-black outline-none mr-2" /> Bimbiya Foodcity
-            </div></Link>
+            </div>
+            </Link>
 
-            <Link href="/bite">
+            <Link href="/bite-section/bite">
             <div className=" flex items-center  text-sm font-semibold leading-6 text-gray-900">
             <ShoppingBagIcon onClick={togglePopup} className="w-6 h-6 text-black outline-none mr-2" />Bimbiya Bite
             </div></Link>

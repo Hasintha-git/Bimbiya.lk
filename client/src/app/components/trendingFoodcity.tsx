@@ -3,11 +3,11 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import Banner1 from '@/assets/5.jpg';
-import Banner2 from '@/assets/6.jpg';
-import Banner3 from '@/assets/7.jpg';
-import Banner4 from '@/assets/8.jpg';
-import Banner5 from '@/assets/9.jpg';
+import Banner1 from '@/app/image/5.jpg';
+import Banner2 from '@/app/image/6.jpg';
+import Banner3 from '@/app/image/7.jpg';
+import Banner4 from '@/app/image/8.jpg';
+import Banner5 from '@/app/image/9.jpg';
 
 const images = [
   { src: Banner1, title: 'Category Title 1', description: 'Category Description 1' },
