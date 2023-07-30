@@ -12,13 +12,13 @@ const MainCategory = () => {
     <div className="main-container p-4">
 
 <div
-  className={`title-wrapper bg-white mb-6 rounded-lg p-2 relative overflow-hidden ${
+  className={`title-wrapper mb-6 rounded-lg p-4 relative overflow-hidden ${
     isAnimated ? 'animated' : ''
   }`}
   onClick={handleAnimation}
 >
-  <div className="animated-bg absolute top-0 left-0 h-full w-2 bg-white"></div>
-  <h2 className="text-3xl font-bold text-black sm:text-3xl text-left">
+  <div className="animated-bg absolute top-0 left-0 h-full w-2 "></div>
+  <h2 className="text-2xl font-bold text-black sm:text-2xl text-left">
     Shop with bimbiya
   </h2>
 </div>
