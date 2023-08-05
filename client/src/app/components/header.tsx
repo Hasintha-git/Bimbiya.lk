@@ -19,7 +19,9 @@ import {
   XCircleIcon,
   ShoppingBagIcon,
   UserPlusIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
+  HomeIcon,
+
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
 import { HiShoppingCart, HiUser } from 'react-icons/hi'
@@ -95,6 +97,11 @@ export default function Header() {
             </button>
           </div>
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
+          <Link href="/home">
+              <div className=" flex items-center  text-sm font-semibold leading-6 text-gray-900">
+                <HomeIcon onClick={togglePopup} className="w-6 h-6 text-black outline-none mr-2" />Home
+              </div></Link>
+
             <Link href="/bite-section/bite">
               <div className=" flex items-center  text-sm font-semibold leading-6 text-gray-900">
                 <ShoppingBagIcon onClick={togglePopup} className="w-6 h-6 text-black outline-none mr-2" />Bimbiya Bite
@@ -102,7 +109,7 @@ export default function Header() {
 
             <Link href="/foodcity-section/foodcity" >
               <div className="flex items-center text-sm font-semibold leading-6 text-gray-900">
-                <HiShoppingCart className="w-6 h-6 text-black outline-none mr-2" /> Bimbiya Foodcity
+                <ShoppingCartIcon className="w-6 h-6 text-black outline-none mr-2" /> Bimbiya Foodcity
               </div>
             </Link>
 
