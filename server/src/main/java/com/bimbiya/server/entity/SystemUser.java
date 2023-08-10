@@ -2,26 +2,31 @@ package com.bimbiya.server.entity;
 
 import com.bimbiya.server.util.enums.Status;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 @Data
 @Entity
 @Table(name = "system_user")
-public class SystemUser extends CommonEntity {
+public class SystemUser extends CommonEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "USERNAME", nullable = false, length = 64)
+    @Column(name = "USERNAME", nullable = false, unique = true, length = 64)
     private String username;
 
     @Column(name = "PASSWORD")
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ROLE", nullable = false)
     private UserRole userRole;
 
@@ -66,4 +71,29 @@ public class SystemUser extends CommonEntity {
     @Column(name = "PASSWORD_EXPIRE_DATE", length = 19)
     private Date passwordExpireDate;
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        System.out.println("llllllllllllllllll");
+        return Collections.singleton(new SimpleGrantedAuthority(userRole.getAuthority()));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
