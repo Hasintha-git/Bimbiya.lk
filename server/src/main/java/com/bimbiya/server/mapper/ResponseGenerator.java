@@ -48,7 +48,7 @@ public class ResponseGenerator {
         responseDTO.setResponseCode(responseCode);
         responseDTO.setResponseDescription(messageSource.getMessage(responseDescription, null, language));
         responseDTO.setData(dataObject);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        return ResponseEntity.status(httpStatus).body(responseDTO);
     }
 
     public ResponseEntity<Object> generateSuccessResponse(Object requestBean, HttpStatus httpStatus,
@@ -64,7 +64,7 @@ public class ResponseGenerator {
         responseDTO.setResponseDescription(messageSource.getMessage(responseDescription, null, language));
         responseDTO.setData(dataObject);
         responseDTO.setFullCount(fullCount);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        return ResponseEntity.status(httpStatus).body(responseDTO);
     }
 
     public ResponseEntity<Object> generateSuccessResponse(HttpStatus httpStatus,
@@ -76,7 +76,7 @@ public class ResponseGenerator {
         responseDTO.setResponseCode(responseCode);
         responseDTO.setResponseDescription(messageSource.getMessage(responseDescription, null, language));
         responseDTO.setData(dataObject);
-        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        return ResponseEntity.status(httpStatus).body(responseDTO);
     }
 
     public ResponseEntity<Object> generateSuccessResponse(Object requestBean, HttpStatus httpStatus,
@@ -88,7 +88,7 @@ public class ResponseGenerator {
 
         responseDTO.setResponseCode(responseCode);
         responseDTO.setResponseDescription(messageSource.getMessage(responseDescription, null, language));
-        return ResponseEntity.status(HttpStatus.OK).body(responseDTO);
+        return ResponseEntity.status(httpStatus).body(responseDTO);
     }
 
 
@@ -97,13 +97,12 @@ public class ResponseGenerator {
 
         //Setting the common fields of response object
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-//        ErrorResponse errorResponse = modelMapper.map(requestBean, ErrorResponse.class);
         ErrorResponse errorResponse = new ErrorResponse();
 
         errorResponse.setErrorCode(errorCode);
         errorResponse.setErrorDescription(messageSource.getMessage(errorDescriptionPropertyName, null, language));
         errorResponse.setErrorComponent(errorComponent);
-        return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+        return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
     public ResponseEntity<Object> generateErrorResponse(HttpStatus httpStatus, String errorCode,
@@ -114,7 +113,7 @@ public class ResponseGenerator {
         errorResponse.setErrorCode(errorCode);
         errorResponse.setErrorDescription(messageSource.getMessage(errorDescriptionPropertyName, null, language));
         errorResponse.setErrorComponent(errorComponent);
-        return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+        return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
     public ResponseEntity<Object> generateErrorResponse(Object requestBean, HttpStatus httpStatus, String errorCode,
@@ -127,7 +126,7 @@ public class ResponseGenerator {
         errorResponse.setErrorCode(errorCode);
         errorResponse.setErrorDescription(errorMessage);
         errorResponse.setErrorComponent(errorComponent);
-        return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+        return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
     public ResponseEntity<Object> generateErrorResponse(Object requestBean, HttpStatus httpStatus, String errorCode,
@@ -139,7 +138,7 @@ public class ResponseGenerator {
         errorResponse.setErrorDescription(messageSource.getMessage(errorDescriptionPropertyName, params, language));
         errorResponse.setErrorComponent(errorComponent);
 
-        return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+        return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
     public ResponseEntity<Object> generateNoContentResponse() {

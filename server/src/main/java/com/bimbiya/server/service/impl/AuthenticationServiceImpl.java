@@ -1,85 +1,67 @@
 package com.bimbiya.server.service.impl;
 
+import com.bimbiya.server.dto.request.RegistrationDTO;
 import com.bimbiya.server.dto.response.LoginResponseDTO;
 import com.bimbiya.server.entity.SystemUser;
-import com.bimbiya.server.entity.UserRole;
+import com.bimbiya.server.mapper.ResponseGenerator;
 import com.bimbiya.server.repository.UserRepository;
-import com.bimbiya.server.repository.UserRoleRepository;
+import com.bimbiya.server.util.MessageConstant;
+import com.bimbiya.server.util.ResponseCode;
 import com.bimbiya.server.util.enums.Status;
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional
+@Log4j2
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthenticationServiceImpl {
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserRoleRepository userRoleRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
     private TokenServiceImpl tokenServiceImpl;
 
-    public SystemUser registerUser(String userName, String password) {
-        System.out.println("auth called");
-        String encodePassword=passwordEncoder.encode(password);
-        UserRole userRole = userRoleRepository.findByCode("admin").get();
+    private ResponseGenerator responseGenerator;
 
-        SystemUser systemUser=new SystemUser();
-        systemUser.setUsername(userName);
-        systemUser.setPassword(encodePassword);
-        systemUser.setUserRole(userRole);
-        systemUser.setAddress("test");
-        systemUser.setCity("test");
-        systemUser.setMobileNo("test");
-        systemUser.setAttempt(0);
-        systemUser.setEmail("test");
-        systemUser.setNic("1999999999999");
-        systemUser.setFullName("test");
-        systemUser.setDateOfBirth(new Date());
-        systemUser.setLastLoggedDate(new Date());
-        systemUser.setPasswordExpireDate(new Date());
-        systemUser.setPwStatus(Status.active);
-        systemUser.setStatus(Status.active);
-        systemUser.setCreatedUser("test");
-        systemUser.setLastUpdatedUser("test");
-        systemUser.setCreatedTime(new Date());
-        systemUser.setLastUpdatedTime(new Date());
-        return userRepository.save(systemUser);
 
-    }
-
-    public LoginResponseDTO loginUser(String userName, String password) {
+    public ResponseEntity<Object> loginUser(RegistrationDTO registrationDTO, Locale locale) {
         try{
-            UsernamePasswordAuthenticationToken us = new UsernamePasswordAuthenticationToken(userName, password);
-            System.out.println("hiiiiiiiiii"+us.getName());
-            Authentication authentication= authenticationManager.authenticate(
-                    us
-            );
+            UsernamePasswordAuthenticationToken us = new UsernamePasswordAuthenticationToken(registrationDTO.getUsername(), registrationDTO.getPassword());
+            Authentication authentication= authenticationManager.authenticate(us);
 
             String token = tokenServiceImpl.generateJwtToken(authentication);
 
-            SystemUser systemUser = userRepository.findByUsername(userName).get();
-            return new LoginResponseDTO(systemUser,token);
+            SystemUser systemUser = Optional.ofNullable(userRepository.findByUsernameAndStatus(registrationDTO.getUsername(), Status.active)).orElse(
+                    null
+            );
 
+            if (Objects.isNull(systemUser)) {
+                return responseGenerator.generateErrorResponse(registrationDTO, HttpStatus.NOT_FOUND,
+                        ResponseCode.USER_GET_SUCCESS, MessageConstant.USER_NOT_FOUND, new
+                                Object[]{registrationDTO.getUsername()},locale);
+            }
+            LoginResponseDTO loginResponseDTO = new LoginResponseDTO(systemUser, token);
+            return responseGenerator
+                    .generateSuccessResponse(registrationDTO, HttpStatus.OK, ResponseCode.USER_GET_SUCCESS,
+                            MessageConstant.SUCCESSFULLY_GET, locale, loginResponseDTO);
         }catch (AuthenticationException e) {
-            return new LoginResponseDTO(null,"");
+            log.error(e.getMessage());
+            throw e;
         }
     }
 }

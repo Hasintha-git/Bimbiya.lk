@@ -1,21 +1,25 @@
 package com.bimbiya.server.service.impl;
 
+import com.bimbiya.server.dto.SimpleBaseDTO;
 import com.bimbiya.server.dto.request.UserRequestDTO;
 import com.bimbiya.server.dto.response.UserResponseDTO;
 import com.bimbiya.server.entity.SystemUser;
+import com.bimbiya.server.entity.UserRole;
+import com.bimbiya.server.mapper.DtoToEntityMapper;
 import com.bimbiya.server.mapper.EntityToDtoMapper;
 import com.bimbiya.server.mapper.ResponseGenerator;
 import com.bimbiya.server.repository.UserRepository;
+import com.bimbiya.server.repository.UserRoleRepository;
 import com.bimbiya.server.repository.specifications.UserSpecification;
 import com.bimbiya.server.service.UserService;
 import com.bimbiya.server.util.MessageConstant;
 import com.bimbiya.server.util.ResponseCode;
+import com.bimbiya.server.util.enums.ClientStatusEnum;
 import com.bimbiya.server.util.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -25,20 +29,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Log4j2
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService {
 
-    private PasswordEncoder encoder;
-
     private UserRepository userRepository;
+
+    private UserRoleRepository userRoleRepository;
 
     private UserSpecification userSpecification;
 
@@ -46,7 +48,35 @@ public class UserServiceImpl implements UserService {
 
     private ResponseGenerator responseGenerator;
 
-    private MessageSource messageSource;
+
+    private PasswordEncoder passwordEncoder;
+
+    @Override
+    public Object getReferenceData() {
+        try {
+            Map<String, Object> refData = new HashMap<>();
+
+            //get status
+            List<SimpleBaseDTO> defaultStatus = Stream.of(ClientStatusEnum.values()).map(statusEnum -> new SimpleBaseDTO(statusEnum.getCode(), statusEnum.getDescription())).collect(Collectors.toList());
+            //get user role list
+            List<UserRole> data = userRoleRepository.findAllByStatusCodeNot(Status.deleted);
+            List<SimpleBaseDTO> simpleBaseDTOList = data.stream().map(userRole -> {
+                SimpleBaseDTO simpleBaseDTO = new SimpleBaseDTO();
+                return EntityToDtoMapper.mapUserRoleDropdown(simpleBaseDTO, userRole);
+            }).collect(Collectors.toList());
+
+            //set data
+            refData.put("statusList", defaultStatus);
+            refData.put("userRoleList", simpleBaseDTOList);
+
+            return refData;
+
+        } catch (Exception e) {
+            log.error("Exception : ", e);
+            throw e;
+        }
+    }
+
     @Override
     @Transactional
     public ResponseEntity<Object> getUserFilterList(UserRequestDTO userRequestDTO, Locale locale) throws Exception {
@@ -59,12 +89,8 @@ public class UserServiceImpl implements UserService {
                         userRequestDTO.getPageNumber(), userRequestDTO.getPageSize(),
                         Sort.by(Sort.Direction.valueOf(userRequestDTO.getSortDirection()), userRequestDTO.getSortColumn())
                 );
-                System.out.println(">>>> if");
             }else{
-                System.out.println(">>>> else");
-
                 pageRequest = PageRequest.of(userRequestDTO.getPageNumber(), userRequestDTO.getPageSize());
-
             }
 
             List<SystemUser> faqList = ((Objects.isNull(userRequestDTO.getUserRequestSearchDTO())) ? userRepository.findAll
@@ -108,11 +134,11 @@ public class UserServiceImpl implements UserService {
                                 Object[]{userRequestDTO.getId()},locale);
             }
 
-            UserResponseDTO faqAdminResponse = EntityToDtoMapper.mapUser(systemUser);
-
+            UserResponseDTO userResponseDTO = EntityToDtoMapper.mapUser(systemUser);
+            userResponseDTO.setUserRole(systemUser.getUserRole());
             return responseGenerator
                     .generateSuccessResponse(userRequestDTO, HttpStatus.OK, ResponseCode.USER_GET_SUCCESS,
-                            MessageConstant.SUCCESSFULLY_GET, locale, faqAdminResponse);
+                            MessageConstant.SUCCESSFULLY_GET, locale, userResponseDTO);
         } catch (EntityNotFoundException ex) {
             log.info(ex.getMessage());
             throw ex;
@@ -125,18 +151,197 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public ResponseEntity<Object> saveUser(UserRequestDTO userRequestDTO, Locale locale) throws Exception {
-        return null;
+        try{
+            SystemUser systemUser = Optional.ofNullable(userRepository.findByUsernameAndStatusNot(userRequestDTO.getUsername(), Status.deleted))
+                    .orElse(null);
+            if (Objects.nonNull(systemUser)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.CONFLICT,
+                                ResponseCode.ALREADY_EXIST ,  MessageConstant.USER_NAME_ALREADY_EXIST, new Object[] {userRequestDTO.getUsername()},
+                                locale);
+            }
+            systemUser = Optional.ofNullable(userRepository.findByEmailAndStatusNot(userRequestDTO.getEmail(), Status.deleted))
+                    .orElse(null);
+            if (Objects.nonNull(systemUser)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.CONFLICT,
+                                ResponseCode.ALREADY_EXIST ,  MessageConstant.USER_EMAIL_ALREADY_EXIST, new Object[] {userRequestDTO.getEmail()},
+                                locale);
+            }
+
+            systemUser = Optional.ofNullable(userRepository.findByNicAndStatusNot(userRequestDTO.getNic(), Status.deleted))
+                    .orElse(null);
+            if (Objects.nonNull(systemUser)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.CONFLICT,
+                                ResponseCode.ALREADY_EXIST ,  MessageConstant.USER_NIC_ALREADY_EXIST, new Object[] {userRequestDTO.getNic()},
+                                locale);
+            }
+
+            systemUser = Optional.ofNullable(userRepository.findByMobileNoAndStatusNot(userRequestDTO.getMobileNo(), Status.deleted))
+                    .orElse(null);
+            if (Objects.nonNull(systemUser)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.CONFLICT,
+                                ResponseCode.ALREADY_EXIST ,  MessageConstant.USER_MOBILE_ALREADY_EXIST, new Object[] {userRequestDTO.getMobileNo()},
+                                locale);
+            }
+
+            systemUser = Optional.ofNullable(userRepository.findByNicAndStatusNot(userRequestDTO.getNic(), Status.deleted))
+                    .orElse(null);
+
+            if (Objects.nonNull(systemUser)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.CONFLICT,
+                                ResponseCode.ALREADY_EXIST ,  MessageConstant.USER_NIC_ALREADY_EXIST, new Object[] {userRequestDTO.getNic()},
+                                locale);
+            }
+
+            UserRole userRole = Optional.ofNullable(userRoleRepository.findByCodeAndStatusCode(userRequestDTO.getUserRole(), Status.active)).orElse(null);
+            if (Objects.isNull(userRole)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.NOT_FOUND,
+                                ResponseCode.NOT_FOUND ,  MessageConstant.USER_ROLE_NOT_FOUND,
+                                locale);
+            }
+
+            systemUser = Optional.ofNullable(userRepository.findByUsernameAndStatus(userRequestDTO.getNic(), Status.deleted))
+                    .orElse(new SystemUser());
+
+
+            Date systemDate = new Date();
+            modelMapper.map(userRequestDTO, systemUser);
+            systemUser.setStatus(Status.valueOf(userRequestDTO.getStatusCode()));
+            systemUser.setPwStatus(Status.active);
+            systemUser.setPasswordExpireDate(systemDate);
+            systemUser.setCreatedTime(systemDate);
+            systemUser.setCreatedUser(userRequestDTO.getCreatedUser());
+            systemUser.setLastUpdatedUser(userRequestDTO.getLastUpdatedUser());
+            systemUser.setLastUpdatedTime(systemDate);
+            systemUser.setAttempt(0);
+            systemUser.setUserRole(userRole);
+
+            String encode = passwordEncoder.encode(userRequestDTO.getPassword());
+            systemUser.setPassword(encode);
+
+            userRepository.save(systemUser);
+            return responseGenerator.generateSuccessResponse(userRequestDTO, HttpStatus.OK,
+                    ResponseCode.USER_SAVED_SUCCESS, MessageConstant.USER_SUCCESSFULLY_SAVE, locale, new Object[] {userRequestDTO.getUsername()});
+        }
+        catch (EntityNotFoundException ex) {
+            log.info(ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            throw ex;
+        }
     }
 
     @Override
     @Transactional
     public ResponseEntity<Object> editUser(UserRequestDTO userRequestDTO, Locale locale) {
-        return null;
+        try{
+            SystemUser systemUser = Optional.ofNullable(userRepository.findByEmailAndStatusNotAndIdNot(userRequestDTO.getEmail(), Status.deleted,userRequestDTO.getId()))
+                    .orElse(null);
+            if (Objects.nonNull(systemUser)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.CONFLICT,
+                                ResponseCode.ALREADY_EXIST ,  MessageConstant.USER_EMAIL_ALREADY_EXIST, new Object[] {userRequestDTO.getEmail()},
+                                locale);
+            }
+
+            systemUser = Optional.ofNullable(userRepository.findByNicAndStatusNotAndIdNot(userRequestDTO.getNic(), Status.deleted,userRequestDTO.getId()))
+                    .orElse(null);
+            if (Objects.nonNull(systemUser)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.CONFLICT,
+                                ResponseCode.ALREADY_EXIST ,  MessageConstant.USER_NIC_ALREADY_EXIST, new Object[] {userRequestDTO.getNic()},
+                                locale);
+            }
+
+            systemUser = Optional.ofNullable(userRepository.findByMobileNoAndStatusNotAndIdNot(userRequestDTO.getMobileNo(), Status.deleted,userRequestDTO.getId()))
+                    .orElse(null);
+            if (Objects.nonNull(systemUser)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.CONFLICT,
+                                ResponseCode.ALREADY_EXIST ,  MessageConstant.USER_MOBILE_ALREADY_EXIST, new Object[] {userRequestDTO.getMobileNo()},
+                                locale);
+            }
+
+            systemUser = Optional.ofNullable(userRepository.findByNicAndStatusNotAndIdNot(userRequestDTO.getNic(), Status.deleted, userRequestDTO.getId()))
+                    .orElse(null);
+
+            if (Objects.nonNull(systemUser)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.CONFLICT,
+                                ResponseCode.ALREADY_EXIST ,  MessageConstant.USER_NIC_ALREADY_EXIST, new Object[] {userRequestDTO.getNic()},
+                                locale);
+            }
+
+            UserRole userRole = Optional.ofNullable(userRoleRepository.findByCodeAndStatusCode(userRequestDTO.getUserRole(), Status.active)).orElse(null);
+            if (Objects.isNull(userRole)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.NOT_FOUND,
+                                ResponseCode.NOT_FOUND ,  MessageConstant.USER_ROLE_NOT_FOUND,
+                                locale);
+            }
+
+            systemUser = Optional.ofNullable(userRepository.findByIdAndStatusNot(userRequestDTO.getId(), Status.deleted))
+                    .orElse(null);
+            if (Objects.isNull(systemUser)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.CONFLICT,
+                                ResponseCode.NOT_FOUND ,  MessageConstant.USER_NOT_FOUND, new Object[] {userRequestDTO.getUsername()},
+                                locale);
+            }
+
+            Date systemDate = new Date();
+            systemUser.setLastUpdatedTime(systemDate);
+            systemUser.setUserRole(userRole);
+
+            String encode = passwordEncoder.encode(userRequestDTO.getPassword());
+            systemUser.setPassword(encode);
+
+            DtoToEntityMapper.mapUser(systemUser, userRequestDTO);
+
+            userRepository.save(systemUser);
+            return responseGenerator.generateSuccessResponse(userRequestDTO, HttpStatus.OK,
+                    ResponseCode.USER_UPDATE_SUCCESS, MessageConstant.USER_SUCCESSFULLY_UPDATE, locale, new Object[] {userRequestDTO.getUsername()});
+        }
+        catch (EntityNotFoundException ex) {
+            log.info(ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            throw ex;
+        }
     }
 
     @Override
     @Transactional
     public ResponseEntity<Object> deleteUser(UserRequestDTO userRequestDTO, Locale locale) {
-        return null;
+        try{
+
+            SystemUser systemUser = Optional.ofNullable(userRepository.findByIdAndStatusNot(userRequestDTO.getId(), Status.deleted))
+                    .orElse(null);
+            if (Objects.isNull(systemUser)) {
+                return responseGenerator
+                        .generateErrorResponse(userRequestDTO, HttpStatus.CONFLICT,
+                                ResponseCode.NOT_FOUND ,  MessageConstant.USER_NOT_FOUND, new Object[] {userRequestDTO.getUsername()},
+                                locale);
+            }
+
+            systemUser.setStatus(Status.deleted);
+            userRepository.save(systemUser);
+            return responseGenerator.generateSuccessResponse(userRequestDTO, HttpStatus.OK,
+                    ResponseCode.USER_DELETE_SUCCESS, MessageConstant.USER_SUCCESSFULLY_DELETE, locale, new Object[] {userRequestDTO.getUsername()});
+        }
+        catch (EntityNotFoundException ex) {
+            log.info(ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            throw ex;
+        }
     }
 }

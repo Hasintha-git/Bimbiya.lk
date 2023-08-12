@@ -8,13 +8,8 @@ public class ErrorResponse {
 
     private String errorDescription;
 
-    private String errorMessageType;
 
     private String errorComponent;
-
-    private String errorDetail;
-
-    private String epicUserID;
 
     private Object data;
 }

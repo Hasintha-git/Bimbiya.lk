@@ -36,7 +36,7 @@ public class UserSpecification {
                         .concat(userRequestSearchDTO.getEmail().toLowerCase()).concat("%")));
 
             if (Objects.nonNull(userRequestSearchDTO.getUserRole()) )
-                predicates.add(criteriaBuilder.equal(root.get(SystemUser_.USER_ROLE).get(UserRole_.ID), userRequestSearchDTO.getUserRole()));
+                predicates.add(criteriaBuilder.equal(root.get(SystemUser_.USER_ROLE).get(UserRole_.CODE), userRequestSearchDTO.getUserRole()));
 
             if (Objects.nonNull(userRequestSearchDTO.getStatus()) && !userRequestSearchDTO.getStatus().isEmpty())
                 predicates.add(criteriaBuilder.equal(root.get(SystemUser_.STATUS), Status.valueOf(userRequestSearchDTO.getStatus())));

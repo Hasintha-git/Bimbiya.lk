@@ -1,5 +1,6 @@
 package com.bimbiya.server.entity;
 
+import com.bimbiya.server.util.enums.Status;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -23,7 +24,8 @@ public class UserRole extends CommonEntity implements GrantedAuthority
     private String description;
 
     @Column(name = "STATUS", nullable = false, length = 8)
-    private String statusCode;
+    @Enumerated(EnumType.STRING)
+    private Status statusCode;
 
     public UserRole() {
     }
@@ -37,10 +39,9 @@ public class UserRole extends CommonEntity implements GrantedAuthority
         this.code = code;
     }
 
-    public UserRole( String code, String description, String statusCode) {
+    public UserRole( String code, String description) {
         this.code = code;
         this.description = description;
-        this.statusCode = statusCode;
     }
 
     @Override

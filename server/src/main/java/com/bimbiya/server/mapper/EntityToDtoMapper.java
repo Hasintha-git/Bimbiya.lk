@@ -1,8 +1,12 @@
 package com.bimbiya.server.mapper;
 
 
+import com.bimbiya.server.dto.SimpleBaseDTO;
 import com.bimbiya.server.dto.response.UserResponseDTO;
 import com.bimbiya.server.entity.SystemUser;
+import com.bimbiya.server.entity.UserRole;
+
+import java.util.Objects;
 
 public class EntityToDtoMapper {
     private EntityToDtoMapper() {
@@ -18,11 +22,24 @@ public class EntityToDtoMapper {
         userResponseDTO.setCity(systemUser.getCity());
         userResponseDTO.setNic(systemUser.getNic());
         userResponseDTO.setDateOfBirth(systemUser.getDateOfBirth());
-        userResponseDTO.setNic(systemUser.getNic());
-        userResponseDTO.setNic(systemUser.getNic());
-        userResponseDTO.setNic(systemUser.getNic());
-        userResponseDTO.setNic(systemUser.getNic());
+        userResponseDTO.setFullName(systemUser.getFullName());
+        userResponseDTO.setMobileNo(systemUser.getMobileNo());
+        userResponseDTO.setAddress(systemUser.getAddress());
+
+        if (Objects.nonNull(systemUser.getPasswordExpireDate())) {
+            userResponseDTO.setPasswordExpireDate(systemUser.getPasswordExpireDate());
+        }
+
+        if (Objects.nonNull(systemUser.getLastLoggedDate())) {
+            userResponseDTO.setLastLoggedDate(systemUser.getLastLoggedDate());
+        }
         return userResponseDTO;
+    }
+
+    public static SimpleBaseDTO mapUserRoleDropdown(SimpleBaseDTO simpleBaseDTO, UserRole userRole) {
+        simpleBaseDTO.setCode(userRole.getCode());
+        simpleBaseDTO.setDescription(userRole.getDescription());
+        return simpleBaseDTO;
     }
 
 }

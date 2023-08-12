@@ -30,4 +30,8 @@ public class UserResponseDTO {
     public UserResponseDTO(Long id) {
         this.id = id;
     }
+
+    public UserResponseDTO(String username) {
+        this.username = username;
+    }
 }

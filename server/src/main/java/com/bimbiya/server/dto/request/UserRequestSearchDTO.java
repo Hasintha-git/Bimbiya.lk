@@ -11,5 +11,5 @@ public class UserRequestSearchDTO {
     private String status;
     private String nic;
     private String email;
-    private Long userRole;
+    private String userRole;
 }

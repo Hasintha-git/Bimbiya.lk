@@ -1,5 +1,6 @@
 package com.bimbiya.server.service.impl;
 
+import com.bimbiya.server.util.RSAKeyProperties;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -8,24 +9,29 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class TokenServiceImpl {
 
     @Autowired
     private JwtDecoder jwtDecoder;
 
-//    @Autowired
-//    private JwtEncoder jwtEncoder;
+    @Autowired
+    private RSAKeyProperties rsaKeyProperties;
 
     private final String secretKey = "your-secret-key"; // Replace this with your secret key
 
     public String generateJwtToken(Authentication authentication) {
         String subject = authentication.getName();
+        Date expirationDate = new Date(System.currentTimeMillis() + 3600000); // 1 hour in milliseconds
 
         String jwt = Jwts.builder()
                 .setSubject(subject)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.RS256, rsaKeyProperties.getPrivateKey())  // Use RSA-SHA256 with the private key
                 .compact();
+
 
         boolean b = validateJwtToken(jwt);
 
