@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient,HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import {Observable,throwError} from 'rxjs';
 import { getEndpoint, SECURE } from 'src/app/utility/constants/end-point';
 import {timeout} from 'rxjs/operators';
+import { DataTable } from 'src/app/pages/models/data-table';
+import { CommonFunctionService } from '../common-functions/common-function.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,9 +13,26 @@ export class UserService {
 
   requestUrl: string;
 
-  constructor(public httpClient: HttpClient) { 
+  constructor(public httpClient: HttpClient,public commonFunctionService: CommonFunctionService) { 
     this.requestUrl = `${getEndpoint(SECURE)}/auth`;
   }
+
+  getSearchData(full: boolean): Observable<any> {
+    const params = new HttpParams().set('full', full.toString());
+    return this.httpClient.get(this.requestUrl + `/search-reference-data`, {
+      responseType: 'json',
+      params: params
+    });
+  }
+
+  getList(searchParamMap: Map<string, string>): Observable<DataTable<any>> {
+    const httpParams = this.commonFunctionService.getDataTableHttpParam(searchParamMap);
+    return this.httpClient.get(this.requestUrl + `/filter-list`, {
+      params: httpParams,
+      responseType: 'json'
+    });
+  }
+
 
   userRegister(object: any) {
     return this.httpClient.post(this.requestUrl + `/register`  , object, {

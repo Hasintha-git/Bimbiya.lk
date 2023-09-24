@@ -30,6 +30,17 @@ import { DeliveredOrderComponent } from './delivered-order/delivered-order.compo
 import { TrendingItemComponent } from './trending-item/trending-item.component';
 import { CategoryManagementComponent } from './category-management/category-management.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { UserManagementComponent } from './user-management/user-management.component';
+import { DeleteUserComponent } from './user-management/delete-user/delete-user.component';
+import { EditUserComponent } from './user-management/edit-user/edit-user.component';
+import { AddUserComponent } from './user-management/add-user/add-user.component';
+import { ViewUserComponent } from './user-management/view-user/view-user.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { RegexFormateModule } from 'src/app/utility/directive/regex-formate.module';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 @NgModule({
   declarations: [
     PostLoginComponent,
@@ -42,6 +53,11 @@ import {MatExpansionModule} from '@angular/material/expansion';
     DeliveredOrderComponent,
     TrendingItemComponent,
     CategoryManagementComponent,
+    UserManagementComponent,
+    DeleteUserComponent,
+    EditUserComponent,
+    AddUserComponent,
+    ViewUserComponent,
   ],
   imports: [
     CommonModule,
@@ -52,7 +68,6 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatCardModule,
     MatSidenavModule,
     MatMenuModule,
-    MatDialogModule,
     MatGridListModule,
     MatTableModule,
     MatButtonModule,
@@ -64,7 +79,13 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatInputModule,
     MatRadioModule,
     ClipboardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatPaginatorModule,
+    RegexFormateModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatStepperModule,
+    MatFormFieldModule
   ]
 })
 export class PostLoginModule { }

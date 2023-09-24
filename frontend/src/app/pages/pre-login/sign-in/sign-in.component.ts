@@ -42,7 +42,6 @@ export class SignInComponent implements OnInit {
 onSubmit() {    
   this.spinner.show();
     if (this.userForm.valid) {
-      this.signInModel.last_name="";
       // this.userService.userLogin(this.signInModel).subscribe((userResponse: any)=> {
       //     this.sessionStorage.setItem("user",userResponse.data);
           this.routerLink.navigateByUrl('/post-login')

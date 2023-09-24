@@ -21,6 +21,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { ToastrModule } from 'ngx-toastr';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -41,21 +42,18 @@ import { ToastrModule } from 'ngx-toastr';
     MatMenuModule,
     MatCheckboxModule,
     MatInputModule,
-    ReactiveFormsModule,
-    MatNativeDateModule,
-    FormsModule,
-    MatInputModule,
     MatRadioModule,
     HttpClientModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,
     NgxSpinnerModule,
+    MatDialogModule,
     ToastrModule.forRoot({
       timeOut: 5000, // 5 seconds
-  positionClass: 'toast-top-right',
-  preventDuplicates: true,
-  closeButton: true,
-  progressBar: true
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+      closeButton: true,
+      progressBar: true
     })
   ],
   providers: [

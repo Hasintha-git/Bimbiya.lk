@@ -10,6 +10,7 @@ import { ApprovedOrderComponent } from './approved-order/approved-order.componen
 import { DeliveredOrderComponent } from './delivered-order/delivered-order.component';
 import { TrendingItemComponent } from './trending-item/trending-item.component';
 import { CategoryManagementComponent } from './category-management/category-management.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 
 const routes: Routes = [
   {path:'',component:PostLoginComponent, children:[
@@ -23,6 +24,7 @@ const routes: Routes = [
     {path:'delivered-order',component:DeliveredOrderComponent},
     {path:'trending-item',component:TrendingItemComponent},
     {path:'category-management',component:CategoryManagementComponent},
+    {path:'user-management',component:UserManagementComponent},
     // {
     //   path: 'employee-analytics',
     //   loadChildren: () => import('./employee-analytics/employee-analytics.module').then(m => m.EmployeeAnalyticsModule),

@@ -9,7 +9,7 @@
             <div style="display: flex;flex-direction: column;">
                 <label style="font-weight: 500;">Hotel Name</label>
                 <mat-form-field class="ultra-max-field" appearance="outline">
-                    <input matInput placeholder="Name" formControlName="first_name"  [(ngModel)]="signUpModel.first_name">
+                    <input matInput placeholder="Name" formControlName="first_name"  [(ngModel)]="signUpModel.fullName">
                     <mat-error *ngIf="first_name?.hasError('required')">Hotel Name cannot be empty
                     </mat-error>
                 </mat-form-field>
