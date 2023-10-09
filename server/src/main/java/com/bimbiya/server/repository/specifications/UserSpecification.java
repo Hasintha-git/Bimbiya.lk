@@ -1,6 +1,6 @@
 package com.bimbiya.server.repository.specifications;
 
-import com.bimbiya.server.dto.request.UserRequestSearchDTO;
+import com.bimbiya.server.dto.filter.UserRequestSearchDTO;
 import com.bimbiya.server.entity.SystemUser;
 import com.bimbiya.server.entity.SystemUser_;
 import com.bimbiya.server.entity.UserRole_;

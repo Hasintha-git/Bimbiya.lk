@@ -20,8 +20,8 @@ import { StorageService } from './models/StorageService';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { NgxSpinnerModule } from "ngx-spinner";
-import { ToastrModule } from 'ngx-toastr';
 import { MatDialogModule } from '@angular/material/dialog';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [

@@ -2,9 +2,14 @@ package com.bimbiya.server.mapper;
 
 
 import com.bimbiya.server.dto.SimpleBaseDTO;
+import com.bimbiya.server.dto.response.BytePackageResponseDTO;
+import com.bimbiya.server.dto.response.IngredientsResponseDTO;
 import com.bimbiya.server.dto.response.UserResponseDTO;
+import com.bimbiya.server.entity.BytePackage;
+import com.bimbiya.server.entity.Ingredients;
 import com.bimbiya.server.entity.SystemUser;
 import com.bimbiya.server.entity.UserRole;
+import com.bimbiya.server.util.enums.ClientStatusEnum;
 
 import java.util.Objects;
 
@@ -25,6 +30,8 @@ public class EntityToDtoMapper {
         userResponseDTO.setFullName(systemUser.getFullName());
         userResponseDTO.setMobileNo(systemUser.getMobileNo());
         userResponseDTO.setAddress(systemUser.getAddress());
+        userResponseDTO.setUserRole(systemUser.getUserRole().getCode());
+        userResponseDTO.setUserRoleDescription(systemUser.getUserRole().getDescription());
 
         if (Objects.nonNull(systemUser.getPasswordExpireDate())) {
             userResponseDTO.setPasswordExpireDate(systemUser.getPasswordExpireDate());
@@ -33,6 +40,23 @@ public class EntityToDtoMapper {
         if (Objects.nonNull(systemUser.getLastLoggedDate())) {
             userResponseDTO.setLastLoggedDate(systemUser.getLastLoggedDate());
         }
+
+        if (Objects.nonNull(systemUser.getCreatedUser())) {
+            userResponseDTO.setCreatedUser(systemUser.getCreatedUser());
+        }
+
+        if (Objects.nonNull(systemUser.getCreatedTime())) {
+            userResponseDTO.setCreatedTime(systemUser.getCreatedTime());
+        }
+
+        if (Objects.nonNull(systemUser.getLastUpdatedUser())) {
+            userResponseDTO.setLastUpdatedUser(systemUser.getLastUpdatedUser());
+        }
+
+        if (Objects.nonNull(systemUser.getLastUpdatedTime())) {
+            userResponseDTO.setLastUpdatedTime(systemUser.getLastUpdatedTime());
+        }
+
         return userResponseDTO;
     }
 
@@ -40,6 +64,61 @@ public class EntityToDtoMapper {
         simpleBaseDTO.setCode(userRole.getCode());
         simpleBaseDTO.setDescription(userRole.getDescription());
         return simpleBaseDTO;
+    }
+
+    public static IngredientsResponseDTO mapIngredient(Ingredients ingredients) {
+        IngredientsResponseDTO ingredientsResponseDTO = new IngredientsResponseDTO();
+        ingredientsResponseDTO.setIngredientsId(ingredients.getIngredientsId());
+        ingredientsResponseDTO.setIngredientsName(ingredients.getIngredientsName());
+        ingredientsResponseDTO.setStatus(String.valueOf(ingredients.getStatusCode()));
+
+        if (Objects.nonNull(ingredients.getCreatedUser())) {
+            ingredientsResponseDTO.setCreatedUser(ingredients.getCreatedUser());
+        }
+
+        if (Objects.nonNull(ingredients.getCreatedTime())) {
+            ingredientsResponseDTO.setCreatedTime(ingredients.getCreatedTime());
+        }
+
+        if (Objects.nonNull(ingredients.getLastUpdatedUser())) {
+            ingredientsResponseDTO.setLastUpdatedUser(ingredients.getLastUpdatedUser());
+        }
+
+        if (Objects.nonNull(ingredients.getLastUpdatedTime())) {
+            ingredientsResponseDTO.setLastUpdatedTime(ingredients.getLastUpdatedTime());
+        }
+
+        return ingredientsResponseDTO;
+    }
+
+    public static BytePackageResponseDTO mapBytePackage(BytePackage bytePackage) {
+        BytePackageResponseDTO bytePackageResponseDTO = new BytePackageResponseDTO();
+        bytePackageResponseDTO.setPackageId(bytePackage.getPackageId());
+        bytePackageResponseDTO.setMealName(bytePackage.getMealName());
+        bytePackageResponseDTO.setDescription(bytePackage.getDescription());
+        bytePackageResponseDTO.setPrice(bytePackage.getPrice());
+        bytePackageResponseDTO.setStatus(ClientStatusEnum.getEnum(String.valueOf(bytePackage.getStatus())).getCode());
+        bytePackageResponseDTO.setStatusDescription(ClientStatusEnum.getEnum(String.valueOf(bytePackage.getStatus())).getDescription());
+        bytePackageResponseDTO.setPortion(ClientStatusEnum.getEnum(bytePackage.getPotion()).getCode());
+        bytePackageResponseDTO.setPortionDescription(ClientStatusEnum.getEnum(bytePackage.getPotion()).getDescription());
+
+        if (Objects.nonNull(bytePackage.getCreatedUser())) {
+            bytePackageResponseDTO.setCreatedUser(bytePackage.getCreatedUser());
+        }
+
+        if (Objects.nonNull(bytePackage.getCreatedTime())) {
+            bytePackageResponseDTO.setCreatedTime(bytePackage.getCreatedTime());
+        }
+
+        if (Objects.nonNull(bytePackage.getLastUpdatedUser())) {
+            bytePackageResponseDTO.setLastUpdatedUser(bytePackage.getLastUpdatedUser());
+        }
+
+        if (Objects.nonNull(bytePackage.getLastUpdatedTime())) {
+            bytePackageResponseDTO.setLastUpdatedTime(bytePackage.getLastUpdatedTime());
+        }
+
+        return bytePackageResponseDTO;
     }
 
 }

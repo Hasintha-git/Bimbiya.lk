@@ -1,4 +1,4 @@
-package com.bimbiya.server.dto.request;
+package com.bimbiya.server.dto.filter;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -4,8 +4,10 @@ import com.bimbiya.server.util.RSAKeyProperties;
 import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -18,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class SecurityConfig {
@@ -51,8 +56,8 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
-//                    auth.antMatchers("**").permitAll();
-                    auth.antMatchers("/auth/**").permitAll();
+                    auth.antMatchers("**").permitAll();
+//                    auth.antMatchers("/auth/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer:: jwt)
@@ -83,7 +88,26 @@ public class SecurityConfig {
         return modelMapper;
     }
 
+    @Bean
+    public FilterRegistrationBean<CorsFilter> corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
 
+        // Allow requests from your Angular application's origin
+        config.addAllowedOrigin("http://localhost:4200"); // Update with your Angular app's URL
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        config.setAllowCredentials(true); // You may need this for certain cases
+
+        source.registerCorsConfiguration("/**", config);
+
+        CorsFilter corsFilter = new CorsFilter(source);
+
+        FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>(corsFilter);
+        registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+
+        return registrationBean;
+    }
 
 
 

@@ -52,12 +52,12 @@ public class AuthenticationServiceImpl {
 
             if (Objects.isNull(systemUser)) {
                 return responseGenerator.generateErrorResponse(registrationDTO, HttpStatus.NOT_FOUND,
-                        ResponseCode.USER_GET_SUCCESS, MessageConstant.USER_NOT_FOUND, new
+                        ResponseCode.GET_SUCCESS, MessageConstant.USER_NOT_FOUND, new
                                 Object[]{registrationDTO.getUsername()},locale);
             }
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO(systemUser, token);
             return responseGenerator
-                    .generateSuccessResponse(registrationDTO, HttpStatus.OK, ResponseCode.USER_GET_SUCCESS,
+                    .generateSuccessResponse(registrationDTO, HttpStatus.OK, ResponseCode.GET_SUCCESS,
                             MessageConstant.SUCCESSFULLY_GET, locale, loginResponseDTO);
         }catch (AuthenticationException e) {
             log.error(e.getMessage());

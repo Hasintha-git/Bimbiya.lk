@@ -1,5 +1,6 @@
 package com.bimbiya.server.service.impl;
 
+import com.bimbiya.server.dto.DataTableDTO;
 import com.bimbiya.server.dto.SimpleBaseDTO;
 import com.bimbiya.server.dto.request.UserRequestDTO;
 import com.bimbiya.server.dto.response.UserResponseDTO;
@@ -79,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public ResponseEntity<Object> getUserFilterList(UserRequestDTO userRequestDTO, Locale locale) throws Exception {
+    public Object getUserFilterList(UserRequestDTO userRequestDTO, Locale locale) throws Exception {
         try {
             PageRequest pageRequest;
 
@@ -106,9 +107,11 @@ public class UserServiceImpl implements UserService {
                     .map(faq -> modelMapper.map(faq, UserResponseDTO.class))
                     .collect(Collectors.toList());
 
-            return responseGenerator
-                    .generateSuccessResponse(userRequestDTO, HttpStatus.OK, ResponseCode.USER_GET_SUCCESS
-                            , MessageConstant.SUCCESSFULLY_GET, locale, collect, fullCount);
+//            return responseGenerator
+//                    .generateSuccessResponse(userRequestDTO, HttpStatus.OK, ResponseCode.USER_GET_SUCCESS
+//                            , MessageConstant.SUCCESSFULLY_GET, locale, collect, fullCount);
+
+            return new DataTableDTO<>(fullCount, (long) collect.size(), collect, null);
 
         } catch (EntityNotFoundException ex) {
             log.info(ex.getMessage());
@@ -130,14 +133,15 @@ public class UserServiceImpl implements UserService {
 
             if (Objects.isNull(systemUser)) {
                 return responseGenerator.generateErrorResponse(userRequestDTO, HttpStatus.NOT_FOUND,
-                        ResponseCode.USER_GET_SUCCESS, MessageConstant.USER_NOT_FOUND, new
+                        ResponseCode.GET_SUCCESS, MessageConstant.USER_NOT_FOUND, new
                                 Object[]{userRequestDTO.getId()},locale);
             }
 
             UserResponseDTO userResponseDTO = EntityToDtoMapper.mapUser(systemUser);
-            userResponseDTO.setUserRole(systemUser.getUserRole());
+            userResponseDTO.setUserRole(systemUser.getUserRole().getCode());
+            userResponseDTO.setUserRoleDescription(systemUser.getUserRole().getDescription());
             return responseGenerator
-                    .generateSuccessResponse(userRequestDTO, HttpStatus.OK, ResponseCode.USER_GET_SUCCESS,
+                    .generateSuccessResponse(userRequestDTO, HttpStatus.OK, ResponseCode.GET_SUCCESS,
                             MessageConstant.SUCCESSFULLY_GET, locale, userResponseDTO);
         } catch (EntityNotFoundException ex) {
             log.info(ex.getMessage());
@@ -211,12 +215,21 @@ public class UserServiceImpl implements UserService {
 
             Date systemDate = new Date();
             modelMapper.map(userRequestDTO, systemUser);
-            systemUser.setStatus(Status.valueOf(userRequestDTO.getStatusCode()));
+            if (Objects.nonNull(userRequestDTO.getStatus())) {
+                systemUser.setStatus(Status.valueOf(userRequestDTO.getStatus()));
+            }else {
+                systemUser.setStatus(Status.active);
+            }
             systemUser.setPwStatus(Status.active);
             systemUser.setPasswordExpireDate(systemDate);
+            if (Objects.nonNull(userRequestDTO.getActiveUserName())) {
+                systemUser.setCreatedUser(userRequestDTO.getActiveUserName());
+                systemUser.setLastUpdatedUser(userRequestDTO.getActiveUserName());
+            }else {
+                systemUser.setCreatedUser(userRequestDTO.getUsername());
+                systemUser.setLastUpdatedUser(userRequestDTO.getUsername());
+            }
             systemUser.setCreatedTime(systemDate);
-            systemUser.setCreatedUser(userRequestDTO.getCreatedUser());
-            systemUser.setLastUpdatedUser(userRequestDTO.getLastUpdatedUser());
             systemUser.setLastUpdatedTime(systemDate);
             systemUser.setAttempt(0);
             systemUser.setUserRole(userRole);
@@ -226,7 +239,7 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(systemUser);
             return responseGenerator.generateSuccessResponse(userRequestDTO, HttpStatus.OK,
-                    ResponseCode.USER_SAVED_SUCCESS, MessageConstant.USER_SUCCESSFULLY_SAVE, locale, new Object[] {userRequestDTO.getUsername()});
+                    ResponseCode.SAVED_SUCCESS, MessageConstant.USER_SUCCESSFULLY_SAVE, locale, new Object[] {userRequestDTO.getUsername()});
         }
         catch (EntityNotFoundException ex) {
             log.info(ex.getMessage());
@@ -299,14 +312,14 @@ public class UserServiceImpl implements UserService {
             systemUser.setLastUpdatedTime(systemDate);
             systemUser.setUserRole(userRole);
 
-            String encode = passwordEncoder.encode(userRequestDTO.getPassword());
-            systemUser.setPassword(encode);
+//            String encode = passwordEncoder.encode(userRequestDTO.getPassword());
+//            systemUser.setPassword(encode);
 
             DtoToEntityMapper.mapUser(systemUser, userRequestDTO);
 
             userRepository.save(systemUser);
             return responseGenerator.generateSuccessResponse(userRequestDTO, HttpStatus.OK,
-                    ResponseCode.USER_UPDATE_SUCCESS, MessageConstant.USER_SUCCESSFULLY_UPDATE, locale, new Object[] {userRequestDTO.getUsername()});
+                    ResponseCode.UPDATE_SUCCESS, MessageConstant.USER_SUCCESSFULLY_UPDATE, locale, new Object[] {userRequestDTO.getUsername()});
         }
         catch (EntityNotFoundException ex) {
             log.info(ex.getMessage());
@@ -334,7 +347,7 @@ public class UserServiceImpl implements UserService {
             systemUser.setStatus(Status.deleted);
             userRepository.save(systemUser);
             return responseGenerator.generateSuccessResponse(userRequestDTO, HttpStatus.OK,
-                    ResponseCode.USER_DELETE_SUCCESS, MessageConstant.USER_SUCCESSFULLY_DELETE, locale, new Object[] {userRequestDTO.getUsername()});
+                    ResponseCode.DELETE_SUCCESS, MessageConstant.USER_SUCCESSFULLY_DELETE, locale, new Object[] {userRequestDTO.getUsername()});
         }
         catch (EntityNotFoundException ex) {
             log.info(ex.getMessage());

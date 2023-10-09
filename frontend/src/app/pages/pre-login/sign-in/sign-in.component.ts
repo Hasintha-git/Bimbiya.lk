@@ -9,7 +9,6 @@ import { UserService } from 'src/app/services/user/user.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { SessionService } from 'src/app/services/session/session-service.service';
 import { NgxSpinnerService } from "ngx-spinner";
-import { ToastrService } from 'ngx-toastr';
 import { ToastServiceService } from 'src/app/services/toast-service.service';
 
 @Component({

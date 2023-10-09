@@ -9,8 +9,8 @@ export default function Main() {
     return (
         <div>
             {/* <Home/> */}
-            {/* <Bite/> */}
-            <Foodcity/>
+            <Bite/>
+            {/* <Foodcity/> */}
         </div>
     );
 }

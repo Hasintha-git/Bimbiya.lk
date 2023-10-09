@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BiteManagementComponent } from './bite-management.component';
+import { AddProductComponent } from './add-product.component';
 
-describe('BiteManagementComponent', () => {
-  let component: BiteManagementComponent;
-  let fixture: ComponentFixture<BiteManagementComponent>;
+describe('AddProductComponent', () => {
+  let component: AddProductComponent;
+  let fixture: ComponentFixture<AddProductComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BiteManagementComponent ]
+      declarations: [ AddProductComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(BiteManagementComponent);
+    fixture = TestBed.createComponent(AddProductComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

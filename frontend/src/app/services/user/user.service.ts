@@ -12,9 +12,11 @@ import { CommonFunctionService } from '../common-functions/common-function.servi
 export class UserService {
 
   requestUrl: string;
+  requestUrlPreLogin: string;
 
   constructor(public httpClient: HttpClient,public commonFunctionService: CommonFunctionService) { 
-    this.requestUrl = `${getEndpoint(SECURE)}/auth`;
+    this.requestUrl = `${getEndpoint(SECURE)}/user/v1/admin`;
+    this.requestUrlPreLogin = `${getEndpoint(SECURE)}/auth`;
   }
 
   getSearchData(full: boolean): Observable<any> {
@@ -33,9 +35,27 @@ export class UserService {
     });
   }
 
+  get(object: any): Observable<any> {
+    return this.httpClient.post(this.requestUrl + `/find-id`, object, { responseType: 'json' });
+  }
+
+  
+  deleteUser(id: any): Observable<any> {
+    return this.httpClient.delete(this.requestUrl+ `/`+ `${id}`, {
+      responseType: 'json'
+    });
+  }
+
+  add(object: any): Observable<any> {
+    return this.httpClient.post(this.requestUrl, object, { responseType: 'json' });
+  }
+
+  update(object: any): Observable<any> {
+    return this.httpClient.put(this.requestUrl, object, { responseType: 'json' });
+  }
 
   userRegister(object: any) {
-    return this.httpClient.post(this.requestUrl + `/register`  , object, {
+    return this.httpClient.post(this.requestUrlPreLogin + `/register`  , object, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Accept': '*/*',
@@ -49,7 +69,7 @@ export class UserService {
 
   userLogin(object: any) {
     let httpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpClient.post(this.requestUrl+ `/login`,object,  { 
+    return this.httpClient.post(this.requestUrlPreLogin+ `/login`,object,  { 
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Accept': '*/*',

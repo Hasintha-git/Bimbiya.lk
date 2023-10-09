@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { MatSort } from '@angular/material/sort';
 import { SimpleBase } from 'src/app/models/SimpleBase';
 import { User } from 'src/app/models/user';
@@ -27,6 +27,7 @@ import { DataTable } from '../../models/data-table';
 })
 export class UserManagementComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
   public userSearch: FormGroup;
@@ -37,10 +38,9 @@ export class UserManagementComponent implements OnInit, AfterViewInit, OnDestroy
   public userRoleList: SimpleBase[];
   public searchReferenceData: Map<string, Object[]>;
   public isSearch: boolean;
-  public access:any;
+  public access: any;
 
   displayedColumns: string[] = ['view', 'username', 'fullName', 'userRole', 'nic', 'email', 'mobileNo', 'status', 'action'];
-
 
   constructor(
     public dialog: MatDialog,
@@ -51,26 +51,24 @@ export class UserManagementComponent implements OnInit, AfterViewInit, OnDestroy
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private commonFunctionService: CommonFunctionService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.spinner.show();
     this.searchModel = new User();
     this.prepareReferenceData();
-    this.initialDataLoader();
     this.initialForm();
-
+    this.initialDataLoader();
   }
 
   initialForm() {
     this.userSearch = this.formBuilder.group({
-      username: this.formBuilder.control('', []),
-      userRole: this.formBuilder.control('', []),
-      status: this.formBuilder.control('', []),
-      nic: this.formBuilder.control('', []),
-      email: this.formBuilder.control('', []),
-      mobileNo: this.formBuilder.control('', []),
+      username: new FormControl(''),
+      userRole: new FormControl(''),
+      status: new FormControl(''),
+      nic: new FormControl(''),
+      email: new FormControl(''),
+      mobileNo: new FormControl(''),
     });
   }
 
@@ -80,10 +78,10 @@ export class UserManagementComponent implements OnInit, AfterViewInit, OnDestroy
         this.statusList = response.statusList;
         this.userRoleList = response.userRoleList;
       },
-        error => {
-          this.toast.errorMessage(error.error['message']);
-        }
-      );
+      error => {
+        this.toast.errorMessage(error.error['message']);
+      }
+    );
   }
 
   ngAfterViewInit() {
@@ -100,7 +98,6 @@ export class UserManagementComponent implements OnInit, AfterViewInit, OnDestroy
       )
       .subscribe();
   }
-
 
   initialDataLoader(): void {
     this.initialDataTable();
@@ -123,29 +120,20 @@ export class UserManagementComponent implements OnInit, AfterViewInit, OnDestroy
     this.userService.getList(searchParamMap)
       .subscribe((data: DataTable<User>) => {
         this.userList = data.records;
+        console.log("---->",this.userList)
         this.dataSourceUser.datalist = this.userList;
+        console.log(this.dataSourceUser)
         this.dataSourceUser.usersSubject.next(this.userList);
         this.dataSourceUser.countSubject.next(data.totalRecords);
         this.spinner.hide();
       },
       error => {
         this.spinner.hide();
-        // if (error.status === 401) {
-        //   this.handleUnauthorizedError();
-        // } else {
-
-          this.toast.errorMessage(error.error['errorDescription']);
-        // }
+        this.toast.errorMessage(error.error['errorDescription']);
       }
-      );
+    );
   }
 
-  
-  // private handleUnauthorizedError() {
-  //   this.authService.logout();
-  //   this.router.navigate(['/login']);
-  //   localStorage.removeItem('token');
-  // }
   getSearchString(searchParamMap: Map<string, any>, searchModel: User): Map<string, string> {
     if (searchModel.username) {
       searchParamMap.set(this.displayedColumns[1].toString(), searchModel.username);
@@ -168,7 +156,6 @@ export class UserManagementComponent implements OnInit, AfterViewInit, OnDestroy
     return searchParamMap;
   }
 
-
   initialDataTable() {
     this.paginator.pageIndex = 0;
     this.paginator.pageSize = PAGE_LENGTH;
@@ -185,41 +172,42 @@ export class UserManagementComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   add() {
-    // const dialogRef = this.dialog.open(AddUserComponent);
-    // dialogRef.componentInstance.statusList = this.statusList;
-    // dialogRef.componentInstance.userRoleList = this.userRoleList;
-    // dialogRef.afterClosed().subscribe(()  => {
-    //   this.resetUserSearch();
-    // });
+    const dialogRef = this.dialog.open(AddUserComponent);
+    dialogRef.componentInstance.statusList = this.statusList;
+    dialogRef.componentInstance.userRoleList = this.userRoleList;
+    dialogRef.afterClosed().subscribe(result => {
+      this.resetUserSearch();
+    });
   }
 
   edit(id: any) {
-    // const dialogRef = this.dialog.open(EditUserComponent, { data: id });
-    // dialogRef.componentInstance.statusList = this.statusList;
-    // dialogRef.componentInstance.userRoleList = this.userRoleList;
-    // dialogRef.afterClosed().subscribe(()  => {
-    //   this.resetUserSearch();
-    // });
+    const dialogRef = this.dialog.open(EditUserComponent, { data: id });
+    dialogRef.componentInstance.statusList = this.statusList;
+    dialogRef.componentInstance.userRoleList = this.userRoleList;
+    dialogRef.afterClosed().subscribe(result => {
+      this.resetUserSearch();
+    });
   }
 
   delete(id: any) {
-    // const dialogRef = this.dialog.open(DeleteUserComponent, { data: id, width: '350px', height: '180px' });
+    const dialogRef = this.dialog.open(DeleteUserComponent, { data: id, width: '350px', height: '180px' });
 
-    // dialogRef.afterClosed().subscribe(() => {
-    //   this.resetUserSearch();
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      this.resetUserSearch();
+    });
   }
 
   view(id: any) {
-    // const dialogRef = this.dialog.open(ViewUserComponent, { data: id });
-    // dialogRef.afterClosed().subscribe(result => {
-    // });
+    const dialogRef = this.dialog.open(ViewUserComponent, { data: id });
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
 
   ngOnDestroy() {
     this.dialog.closeAll();
   }
 
+  // Getters for form controls
   get username() {
     return this.userSearch.get('username');
   }

@@ -1,6 +1,6 @@
 package com.bimbiya.server.dto.response;
 
-import com.bimbiya.server.entity.UserRole;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +11,8 @@ import java.util.Date;
 public class UserResponseDTO {
     private Long id;
     private String username;
-    private UserRole userRole;
+    private String userRole;
+    private String userRoleDescription;
     private String fullName;
     private String nic;
     private String email;
@@ -24,9 +25,16 @@ public class UserResponseDTO {
     private String statusDescription;
     private String passwordStatusDescription;
     private int attempt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Colombo")
     private Date lastLoggedDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Colombo")
     private Date passwordExpireDate;
-
+    private String createdUser;
+    private String lastUpdatedUser;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Colombo")
+    private Date createdTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Colombo")
+    private Date lastUpdatedTime;
     public UserResponseDTO(Long id) {
         this.id = id;
     }

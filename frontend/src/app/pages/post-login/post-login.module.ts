@@ -23,7 +23,6 @@ import {MatRadioModule} from '@angular/material/radio';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import { CustomerManagementComponent } from './customer-management/customer-management.component';
 import { FoodcityManagementComponent } from './foodcity-management/foodcity-management.component';
-import { BiteManagementComponent } from './bite-management/bite-management.component';
 import { PendingOrderComponent } from './pending-order/pending-order.component';
 import { ApprovedOrderComponent } from './approved-order/approved-order.component';
 import { DeliveredOrderComponent } from './delivered-order/delivered-order.component';
@@ -40,14 +39,15 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RegexFormateModule } from 'src/app/utility/directive/regex-formate.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { Empty } from 'src/app/utility/pipes/empty';
 
 @NgModule({
   declarations: [
+    Empty,
     PostLoginComponent,
     DashboardComponent,
     CustomerManagementComponent,
     FoodcityManagementComponent,
-    BiteManagementComponent,
     PendingOrderComponent,
     ApprovedOrderComponent,
     DeliveredOrderComponent,

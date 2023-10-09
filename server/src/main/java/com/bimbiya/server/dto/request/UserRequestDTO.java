@@ -1,5 +1,6 @@
 package com.bimbiya.server.dto.request;
 
+import com.bimbiya.server.dto.filter.UserRequestSearchDTO;
 import com.bimbiya.server.validators.DeleteValidation;
 import com.bimbiya.server.validators.FindValidation;
 import com.bimbiya.server.validators.InsertValidation;
@@ -40,7 +41,7 @@ public class UserRequestDTO {
     @NotBlank(message = "Mobile no required", groups = {  InsertValidation.class, UpdateValidation.class })
     private String mobileNo;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Colombo")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Colombo")
     private Date dateOfBirth;
 
     @NotBlank(message = "Address required", groups = {  InsertValidation.class, UpdateValidation.class })
@@ -50,7 +51,7 @@ public class UserRequestDTO {
     private String city;
 
     @NotBlank(message = "Status required", groups = {  InsertValidation.class, UpdateValidation.class })
-    private String statusCode;
+    private String status;
 
     private String pwStatus;
 
@@ -70,6 +71,8 @@ public class UserRequestDTO {
     private String createdUser;
 
     private String lastUpdatedUser;
+
+    private String activeUserName;
 
     private int pageNumber;
     private int pageSize;
