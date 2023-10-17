@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+// import { useRouter } from 'next/router';
+
 import Banner1 from '@/app/image/1.jpg';
 import Banner2 from '@/app/image/2.jpg';
 import Banner3 from '@/app/image/3.jpg';
@@ -18,6 +20,8 @@ const images = [
 ];
 
 const BiteCard = () => {
+  // const router = useRouter(); // AK
+
   const [currentPage, setCurrentPage] = useState(1);
   const [hoveredIndex, setHoveredIndex] = useState(-1); // Initial value is -1, which means no index is hovered
   const imagesPerPage = 4;
@@ -36,6 +40,18 @@ const BiteCard = () => {
     setHoveredIndex(index);
   };
 
+  // AK Starts
+  // const handleCardClick = (index) => {
+    // router.push({
+    //   pathname:'/cardDetails',
+    //   query: {
+    //     index: index,
+    //     details: JSON.stringify(currentImages[index]),
+    //   },
+    // })
+  // }
+  // AK Ends
+
   return (
     <div>
        <div className="grid grid-cols-2 gap-4 cursor-pointer sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2">
@@ -45,6 +61,7 @@ const BiteCard = () => {
             className="relative"
             onMouseEnter={() => handleHover(index)}
             onMouseLeave={() => handleHover(-1)}
+            // onClick={() => handleCardClick(index)} // AK
           >
             <div className="h-64 bg-cover bg-center rounded-lg shadow-lg overflow-hidden">
               <img

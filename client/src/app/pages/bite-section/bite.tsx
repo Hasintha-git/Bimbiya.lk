@@ -2,6 +2,7 @@ import Footer from '@/app/components/footer'
 import Header from '@/app/components/header'
 import BiteFilter from '@/app/components/biteFilter'
 import React from 'react';
+import BiteCard from '@/app/components/biteCard';
 
 const Bite = () => {
   return (

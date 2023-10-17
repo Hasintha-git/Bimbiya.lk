@@ -15,7 +15,7 @@ module.exports = {
       animation: {
         "pulse-slow": "pulse 3s linear infinite",
       },
-    },
+    }
   },
   plugins: [],
 };
