@@ -4,12 +4,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @NoArgsConstructor
 @Data
 public class BytePackageSearchDTO {
     private String mealName;
     private BigDecimal price;
-    private String potion;
+    List<String> portionList;
     private String status;
 }

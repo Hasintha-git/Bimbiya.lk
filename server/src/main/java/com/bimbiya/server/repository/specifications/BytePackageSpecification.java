@@ -18,6 +18,7 @@ public class BytePackageSpecification {
 
     public Specification<BytePackage> generateSearchCriteria(BytePackageSearchDTO bytePackageSearchDTO) {
         return (Specification<BytePackage>)(root, query, criteriaBuilder) -> {
+            System.out.println(">>>>>>>>>>>"+bytePackageSearchDTO);
             List<Predicate> predicates = new ArrayList<>();
 
             if (Objects.nonNull(bytePackageSearchDTO.getMealName()) )
@@ -26,8 +27,10 @@ public class BytePackageSpecification {
             if (Objects.nonNull(bytePackageSearchDTO.getStatus()) && !bytePackageSearchDTO.getStatus().isEmpty())
                 predicates.add(criteriaBuilder.equal(root.get(BytePackage_.STATUS), bytePackageSearchDTO.getStatus()));
 
-            if (Objects.nonNull(bytePackageSearchDTO.getPotion()) && !bytePackageSearchDTO.getPotion().isEmpty())
-                predicates.add(criteriaBuilder.equal(root.get(BytePackage_.POTION), bytePackageSearchDTO.getPotion()));
+
+            if (Objects.nonNull(bytePackageSearchDTO.getPortionList()))
+                predicates
+                        .add(root.get(BytePackage_.POTION).in(bytePackageSearchDTO.getPortionList()));
 
             if (Objects.nonNull(bytePackageSearchDTO.getPrice()))
                 predicates.add(criteriaBuilder.equal(root.get(BytePackage_.PRICE), bytePackageSearchDTO.getPrice()));

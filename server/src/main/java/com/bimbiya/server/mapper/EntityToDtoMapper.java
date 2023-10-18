@@ -99,8 +99,7 @@ public class EntityToDtoMapper {
         bytePackageResponseDTO.setPrice(bytePackage.getPrice());
         bytePackageResponseDTO.setStatus(ClientStatusEnum.getEnum(String.valueOf(bytePackage.getStatus())).getCode());
         bytePackageResponseDTO.setStatusDescription(ClientStatusEnum.getEnum(String.valueOf(bytePackage.getStatus())).getDescription());
-        bytePackageResponseDTO.setPortion(ClientStatusEnum.getEnum(bytePackage.getPotion()).getCode());
-        bytePackageResponseDTO.setPortionDescription(ClientStatusEnum.getEnum(bytePackage.getPotion()).getDescription());
+        bytePackageResponseDTO.setPortion(String.valueOf(bytePackage.getPotion()));
 
         if (Objects.nonNull(bytePackage.getCreatedUser())) {
             bytePackageResponseDTO.setCreatedUser(bytePackage.getCreatedUser());

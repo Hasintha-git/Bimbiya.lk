@@ -46,4 +46,8 @@ public class BytePackage implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "LAST_UPDATED_TIME", nullable = false, length = 23)
     private Date lastUpdatedTime;
+
+//    @OneToMany(mappedBy = "bytePackage", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<BytePackageIngredients> packageIngredients = new ArrayList<>();
+
 }

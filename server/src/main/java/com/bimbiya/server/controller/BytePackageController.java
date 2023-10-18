@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -46,7 +47,7 @@ public class BytePackageController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String mealName,
             @RequestParam(required = false) BigDecimal price,
-            @RequestParam(required = false) String portion,
+            @RequestParam(required = false) List<String> portion,
             @RequestParam(required = false) Boolean full,
             @RequestParam(required = false) Boolean dataTable,
             @RequestParam(required = false) Integer draw, Locale locale) throws Exception {
@@ -55,7 +56,7 @@ public class BytePackageController {
         BytePackageSearchDTO searchDTO= new BytePackageSearchDTO();
         searchDTO.setMealName(mealName);
         searchDTO.setPrice(price);
-        searchDTO.setPotion(portion);
+        searchDTO.setPortionList(portion);
         searchDTO.setStatus(status);
 
         bytePackageRequestDTO.setBytePackageSearchDTO(searchDTO);
