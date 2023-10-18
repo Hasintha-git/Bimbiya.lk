@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../../components/header';
+import Header from '../../../components/header';
 import MainCategory from '@/app/components/mainCategory';
 import AddBanner from '@/app/components/addBanner';
 import TrendingBite from '@/app/components/trendingBite';
@@ -7,6 +7,7 @@ import TrendingFoodcity from '@/app/components/trendingFoodcity';
 import Footer from '@/app/components/footer';
 import Link from 'next/link';
 import { HiShoppingCart } from 'react-icons/hi';
+import { FOODCITY_ENABLE } from '../../../../../utils/EndPoint';
 
 export default function Home() {
   return (
@@ -23,9 +24,11 @@ export default function Home() {
         <img className="bg-img" src="main.jpg" alt="your-image-description" />
       </div>
       <MainCategory />
-      <AddBanner />
       <TrendingBite />
+      <AddBanner />
+      {FOODCITY_ENABLE && (
       <TrendingFoodcity />
+      )}
       <Footer />
       <style jsx>{`
         .bg-mn {

@@ -32,6 +32,7 @@ import NextLink from "next/link";
 import Link from "next/link";
 import SearchBox from "./searchbox";
 import { useCart } from "../context/CartContext";
+import { FOODCITY_ENABLE } from "../../../utils/EndPoint";
 
 const profileMenu = [
   {
@@ -163,12 +164,14 @@ export default function Header() {
               </div>
             </Link>
 
+            {FOODCITY_ENABLE && (
             <Link href="/foodcity-section/foodcity">
               <div className="flex items-center text-sm font-semibold leading-6 text-gray-900">
                 <ShoppingCartIcon className="w-6 h-6 text-black outline-none mr-2" />{" "}
                 Bimbiya Foodcity
               </div>
             </Link>
+            )}
           </Popover.Group>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             {/* add to cart section */}
@@ -347,13 +350,15 @@ export default function Header() {
                   >
                     Bimbiya Bite
                   </a>
+
+                  {FOODCITY_ENABLE && (
                   <a
                     href="#"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
                     Bimbiya Foodcity
                   </a>
-
+                  )}
                   {/* <a
                   href="#"
                   className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
