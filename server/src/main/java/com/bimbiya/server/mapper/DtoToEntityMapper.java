@@ -1,9 +1,11 @@
 package com.bimbiya.server.mapper;
 
 
+import com.bimbiya.server.dto.request.AddToCartRequestDTO;
 import com.bimbiya.server.dto.request.BytePackageRequestDTO;
 import com.bimbiya.server.dto.request.IngredientsRequestDTO;
 import com.bimbiya.server.dto.request.UserRequestDTO;
+import com.bimbiya.server.entity.AddToCart;
 import com.bimbiya.server.entity.BytePackage;
 import com.bimbiya.server.entity.Ingredients;
 import com.bimbiya.server.entity.SystemUser;
@@ -65,5 +67,11 @@ public class DtoToEntityMapper {
 
             bytePackage.setImg(decode);
         }
+    }
+
+    public static void mapAddToCart(AddToCart addToCart, AddToCartRequestDTO addToCartRequestDTO) {
+        addToCart.setQty(addToCartRequestDTO.getQty());
+        addToCart.setStatus(addToCartRequestDTO.getStatus());
+
     }
 }

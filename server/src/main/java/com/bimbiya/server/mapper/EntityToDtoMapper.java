@@ -2,13 +2,11 @@ package com.bimbiya.server.mapper;
 
 
 import com.bimbiya.server.dto.SimpleBaseDTO;
+import com.bimbiya.server.dto.response.AddToCartResponseDTO;
 import com.bimbiya.server.dto.response.BytePackageResponseDTO;
 import com.bimbiya.server.dto.response.IngredientsResponseDTO;
 import com.bimbiya.server.dto.response.UserResponseDTO;
-import com.bimbiya.server.entity.BytePackage;
-import com.bimbiya.server.entity.Ingredients;
-import com.bimbiya.server.entity.SystemUser;
-import com.bimbiya.server.entity.UserRole;
+import com.bimbiya.server.entity.*;
 import com.bimbiya.server.util.enums.ClientStatusEnum;
 
 import java.util.Objects;
@@ -120,4 +118,15 @@ public class EntityToDtoMapper {
         return bytePackageResponseDTO;
     }
 
+    public static AddToCartResponseDTO mapAddToCart( AddToCart addToCart) {
+        AddToCartResponseDTO addToCartResponseDTO = new AddToCartResponseDTO();
+        addToCartResponseDTO.setCartId(addToCart.getCartId());
+        addToCartResponseDTO.setQty(addToCart.getQty());
+        addToCartResponseDTO.setPackageId(addToCart.getBpackage().getPackageId());
+        addToCartResponseDTO.setUserId(addToCart.getSystemUser().getId());
+        addToCartResponseDTO.setUserName(addToCart.getSystemUser().getUsername());
+        addToCartResponseDTO.setMealName(addToCart.getBpackage().getMealName());
+        addToCartResponseDTO.setStatus(addToCart.getStatus());
+        return addToCartResponseDTO;
+    }
 }

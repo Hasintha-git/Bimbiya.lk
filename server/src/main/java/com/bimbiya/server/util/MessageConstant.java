@@ -28,4 +28,10 @@ public class MessageConstant {
     public static final String BYTEPACKAGE_SUCCESSFULLY_SAVE = "val.bytepackage.success.save";
     public static final String BYTEPACKAGE_SUCCESSFULLY_UPDATE = "val.bytepackage.success.update";
     public static final String BYTEPACKAGE_SUCCESSFULLY_DELETE = "val.bytepackage.success.delete";
+
+
+    //    ##Add To Cart
+    public static final String ADD_TO_CART_SUCCESS = "val.addtocart.added.success";
+    public static final String ADD_TO_CART_NOT_FOUND = "val.addtocart.not.found";
+    public static final String ADD_TO_CART_REMOVED = "vval.addtocart.removed";
 }

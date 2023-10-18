@@ -19,4 +19,9 @@ public class EndPoint {
     public static final String BYTE_PACKAGE_REQUEST_FIND_ID = "/v1/admin-byte/find-id";
     public static final String BYTE_PACKAGE_REQUEST_MGT = "/v1/admin-byte";
     public static final String BYTE_PACKAGE_REQUEST_SEARCH_DATA = "/v1/admin-byte/search-reference-data";
+
+    //    --------------------- ORDER ---------------------
+    public static final String ADD_TO_CART = "/v1/client-cart/add-to-cart";
+    public static final String GET_TO_CART = "/v1/client-cart/get-to-cart";
+    public static final String REMOVE_TO_CART = "/v1/client-cart/remove-to-cart";
 }
