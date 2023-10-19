@@ -1,10 +1,10 @@
 import React from 'react';
-import Header from '../../../components/header';
-import MainCategory from '@/app/components/mainCategory';
-import AddBanner from '@/app/components/addBanner';
-import TrendingBite from '@/app/components/trendingBite';
-import TrendingFoodcity from '@/app/components/trendingFoodcity';
-import Footer from '@/app/components/footer';
+import Header from '../.././../../components/header';
+import MainCategory from '../../../../components/mainCategory';
+import AddBanner from '../../../../components/addBanner';
+import TrendingBite from '../../../../components/trendingBite';
+import TrendingFoodcity from '../../../../components/trendingFoodcity';
+import Footer from '../../../../components/footer';
 import Link from 'next/link';
 import { HiShoppingCart } from 'react-icons/hi';
 import { FOODCITY_ENABLE } from '../../../../../utils/EndPoint';

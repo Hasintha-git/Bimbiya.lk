@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FOODCITY_ENABLE } from '../../../utils/EndPoint';
+import { FOODCITY_ENABLE } from '../../utils/EndPoint';
 
 const MainCategory = () => {
 
