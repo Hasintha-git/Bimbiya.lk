@@ -32,7 +32,7 @@ import NextLink from "next/link";
 import Link from "next/link";
 import SearchBox from "./searchbox";
 import { useCart } from "../context/CartContext";
-import { FOODCITY_ENABLE } from "../../../utils/EndPoint";
+import { FOODCITY_ENABLE } from "../../utils/EndPoint";
 
 const profileMenu = [
   {
