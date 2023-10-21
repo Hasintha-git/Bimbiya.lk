@@ -8,11 +8,11 @@ import CardDetails from '@/app/components/cardDetails';
 export default function postLogin() {
     return (
         <div>
-            <Home/>
-            {/* <Bite/>
-            <Foodcity/>
-            <CardDetails/> 
-            <Checkout/>*/}
+            {/* <Home/> */}
+            <Bite/>
+            {/* <Foodcity/> */}
+            {/* <CardDetails/>  */}
+            {/* <Checkout/> */}
         </div>
     );
 }

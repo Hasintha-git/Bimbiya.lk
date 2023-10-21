@@ -1,5 +1,6 @@
 package com.bimbiya.server.entity;
 
+import com.bimbiya.server.util.enums.Status;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -26,8 +27,9 @@ public class AddToCart implements Serializable {
     @Column(name = "qty", nullable = false, length = 16)
     private Integer qty;
 
-    @Column(name = "status", nullable = false, length = 16)
-    private String status;
+    @Column(name = "STATUS")
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
 
 }

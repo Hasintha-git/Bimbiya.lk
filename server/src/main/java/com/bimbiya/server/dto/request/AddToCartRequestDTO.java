@@ -21,10 +21,13 @@ public class AddToCartRequestDTO {
 
     @NotNull(message = "QTY required", groups = {  InsertValidation.class })
     private Integer qty;
+
     @NotNull(message = "Package Id required", groups = {  InsertValidation.class })
     private Long packageId;
-    @NotBlank(message = "Ingredients name required", groups = {  InsertValidation.class, FindValidation.class})
+
+    @NotBlank(message = "User name required", groups = {  InsertValidation.class, FindValidation.class})
     private String userName;
+
     private String status;
     private String activeUser;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Colombo")

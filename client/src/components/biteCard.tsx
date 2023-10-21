@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Banner1 from '@/app/image/1.jpeg';
+import Banner1 from '../image/1.jpeg';
 // import { useRouter } from 'next/router';
-import Banner2 from '@/app/image/2.jpg';
-import Banner3 from '@/app/image/3.jpg';
-import Banner4 from '@/app/image/4.jpg';
+import Banner2 from '../image/2.jpg';
+import Banner3 from '../image/3.jpg';
+import Banner4 from '../image/4.jpg';
 import {
   ShoppingCartIcon, EyeIcon
 } from '@heroicons/react/24/outline'

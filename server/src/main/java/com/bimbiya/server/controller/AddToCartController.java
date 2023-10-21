@@ -1,7 +1,7 @@
 package com.bimbiya.server.controller;
 
 import com.bimbiya.server.dto.request.AddToCartRequestDTO;
-import com.bimbiya.server.service.OrderService;
+import com.bimbiya.server.service.AddToCartService;
 import com.bimbiya.server.util.EndPoint;
 import com.bimbiya.server.validators.DeleteValidation;
 import com.bimbiya.server.validators.FindValidation;
@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Locale;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/cart")
 @Log4j2
 @CrossOrigin(origins = "*")
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class OrderController {
+public class AddToCartController {
 
-    private OrderService orderService;
+    private AddToCartService addToCartService;
 
 //    @GetMapping(value = EndPoint.INGREDIENT_REQUEST_SEARCH_DATA)
 //    @CrossOrigin(origins = "*")
@@ -37,7 +37,7 @@ public class OrderController {
     public Object findCartList(@Validated({ FindValidation.class})
             @RequestBody AddToCartRequestDTO addToCartRequestDTO, Locale locale) throws Exception {
         log.info("Received Get To Cart find List Request {} -", addToCartRequestDTO);
-        return orderService.getToCart(addToCartRequestDTO, locale);
+        return addToCartService.getToCart(addToCartRequestDTO, locale);
     }
 
     @PostMapping(value = {EndPoint.ADD_TO_CART}, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -45,7 +45,7 @@ public class OrderController {
     public ResponseEntity<Object> addToCart( @Validated({InsertValidation.class})
             @RequestBody AddToCartRequestDTO addToCartRequestDTO, Locale locale) throws Exception {
         log.info("Received Add to cart add List Request {} -", addToCartRequestDTO);
-        return orderService.addToCart(addToCartRequestDTO, locale);
+        return addToCartService.addToCart(addToCartRequestDTO, locale);
     }
 
     @DeleteMapping(value = {EndPoint.REMOVE_TO_CART}, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,6 +53,6 @@ public class OrderController {
     public ResponseEntity<Object> deleteIngredient(@Validated({ DeleteValidation.class})
                                                        @RequestBody AddToCartRequestDTO addToCartRequestDTO, Locale locale) throws Exception {
         log.info("Received Remove to cart Request {} -", addToCartRequestDTO);
-        return orderService.removeToCart(addToCartRequestDTO, locale);
+        return addToCartService.removeToCart(addToCartRequestDTO, locale);
     }
 }

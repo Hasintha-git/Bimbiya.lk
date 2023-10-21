@@ -12,7 +12,7 @@ import com.bimbiya.server.mapper.ResponseGenerator;
 import com.bimbiya.server.repository.AddToCartRepository;
 import com.bimbiya.server.repository.BytePackageRepository;
 import com.bimbiya.server.repository.UserRepository;
-import com.bimbiya.server.service.OrderService;
+import com.bimbiya.server.service.AddToCartService;
 import com.bimbiya.server.util.MessageConstant;
 import com.bimbiya.server.util.ResponseCode;
 import com.bimbiya.server.util.enums.Status;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Service
 @Log4j2
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public class OrderServiceImpl implements OrderService {
+public class AddToCartServiceImpl implements AddToCartService {
 
     private AddToCartRepository addToCartRepository;
     private UserRepository userRepository;

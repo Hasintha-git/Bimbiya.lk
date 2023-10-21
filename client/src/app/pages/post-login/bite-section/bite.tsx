@@ -1,8 +1,8 @@
-import Footer from '@/app/components/footer'
-import Header from '@/app/components/header'
-import BiteFilter from '@/app/components/biteFilter'
+import Footer from '../../../../components/footer'
+import Header from '../../../../components/header'
+import BiteFilter from '../../../../components/biteFilter'
 import React from 'react';
-import BiteCard from '@/app/components/biteCard';
+import BiteCard from '../../../../components/biteCard';
 
 const Bite = () => {
   return (

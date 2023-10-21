@@ -71,7 +71,7 @@ public class DtoToEntityMapper {
 
     public static void mapAddToCart(AddToCart addToCart, AddToCartRequestDTO addToCartRequestDTO) {
         addToCart.setQty(addToCartRequestDTO.getQty());
-        addToCart.setStatus(addToCartRequestDTO.getStatus());
+        addToCart.setStatus(Status.valueOf(addToCartRequestDTO.getStatus()));
 
     }
 }

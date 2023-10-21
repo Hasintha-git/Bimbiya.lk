@@ -126,7 +126,7 @@ public class EntityToDtoMapper {
         addToCartResponseDTO.setUserId(addToCart.getSystemUser().getId());
         addToCartResponseDTO.setUserName(addToCart.getSystemUser().getUsername());
         addToCartResponseDTO.setMealName(addToCart.getBpackage().getMealName());
-        addToCartResponseDTO.setStatus(addToCart.getStatus());
+        addToCartResponseDTO.setStatus(String.valueOf(addToCart.getStatus()));
         return addToCartResponseDTO;
     }
 }

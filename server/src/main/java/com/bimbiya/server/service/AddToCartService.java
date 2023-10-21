@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Locale;
 
-public interface OrderService {
+public interface AddToCartService {
     Object getReferenceData();
     ResponseEntity<Object> addToCart(AddToCartRequestDTO addToCartRequestDTO, Locale locale) throws Exception;
     Object getToCart(AddToCartRequestDTO addToCartRequestDTO, Locale locale) throws Exception;
