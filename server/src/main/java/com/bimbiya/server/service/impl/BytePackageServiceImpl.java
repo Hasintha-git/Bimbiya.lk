@@ -158,9 +158,15 @@ public class BytePackageServiceImpl implements BytePackageService {
 
     @Override
     @Transactional
+    public ResponseEntity<Object> trendingPackagesList(BytePackageRequestDTO bytePackageRequestDTO, Locale locale) throws Exception {
+        // need dev with order
+        return null;
+    }
+
+    @Override
+    @Transactional
     public ResponseEntity<Object> saveBytePackage(BytePackageRequestDTO bytePackageRequestDTO, Locale locale) throws Exception {
         try{
-            System.out.println(">>>>>>>>>>"+bytePackageRequestDTO.toString());
             BytePackage bytePackage = Optional.ofNullable(bytePackageRepository.findByMealNameAndStatusNot(bytePackageRequestDTO.getMealName(), ClientStatusEnum.DELETED.getCode()))
                     .orElse(null);
 
@@ -176,7 +182,6 @@ public class BytePackageServiceImpl implements BytePackageService {
             bytePackage.setCreatedTime(new Date());
             bytePackage.setLastUpdatedTime(new Date());
 
-            System.out.println("***********"+bytePackage);
             bytePackageRepository.save(bytePackage);
 
             if (Objects.nonNull(bytePackageRequestDTO.getIngredientList())) {

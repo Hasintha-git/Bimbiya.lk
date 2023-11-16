@@ -11,6 +11,7 @@ public interface BytePackageService {
     Object getBytePackageFilterList(BytePackageRequestDTO bytePackageRequestDTO, Locale locale) throws Exception;
 
     ResponseEntity<Object> findBytePackageById(BytePackageRequestDTO bytePackageRequestDTO, Locale locale) throws Exception;
+    ResponseEntity<Object> trendingPackagesList(BytePackageRequestDTO bytePackageRequestDTO, Locale locale) throws Exception;
 
     ResponseEntity<Object> saveBytePackage(BytePackageRequestDTO bytePackageRequestDTO, Locale locale) throws Exception;
 

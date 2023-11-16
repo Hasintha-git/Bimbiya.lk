@@ -9,8 +9,8 @@ export default function Main() {
     return (
         <div>
             {/* <PostLogin/> */}
-            <Login/>
-            {/* <Register/> */}
+            {/* <Login/> */}
+            <Register/>
         </div>
     );
 }

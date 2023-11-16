@@ -1,21 +1,20 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import {Observable,throwError} from 'rxjs';
-import { getEndpoint, SECURE } from 'src/app/utility/constants/end-point';
-import {timeout} from 'rxjs/operators';
+import { Observable, catchError, throwError } from 'rxjs';
 import { DataTable } from 'src/app/pages/models/data-table';
 import { CommonFunctionService } from '../common-functions/common-function.service';
+import { SECURE, getEndpoint } from 'src/app/utility/constants/end-point';
+
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class ByteService {
 
   requestUrl: string;
   requestUrlPreLogin: string;
 
   constructor(public httpClient: HttpClient,public commonFunctionService: CommonFunctionService) { 
-    this.requestUrl = `${getEndpoint(SECURE)}/user/v1/admin-user`;
+    this.requestUrl = `${getEndpoint(SECURE)}/byte-package/v1/admin-byte`;
     this.requestUrlPreLogin = `${getEndpoint(SECURE)}/auth`;
   }
 
@@ -54,33 +53,6 @@ export class UserService {
     return this.httpClient.put(this.requestUrl, object, { responseType: 'json' });
   }
 
-  userRegister(object: any) {
-    return this.httpClient.post(this.requestUrlPreLogin + `/register`  , object, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Accept': '*/*',
-        'Referrer-Policy': 'no-referrer'
-      }),
-      responseType: 'json'
-    }).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  userLogin(object: any) {
-    let httpHeaders = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.httpClient.post(this.requestUrlPreLogin+ `/login`,object,  { 
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Accept': '*/*',
-        'Referrer-Policy': 'no-referrer'
-      }),
-      responseType: 'json'
-    }) .pipe(
-      catchError(this.handleError)
-    );
-  }
-  
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unknown error occurred.';

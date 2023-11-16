@@ -6,7 +6,6 @@ import { MatSort } from '@angular/material/sort';
 import { SimpleBase } from 'src/app/models/SimpleBase';
 import { User } from 'src/app/models/user';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { UserService } from 'src/app/services/user/user.service';
 import { ToastServiceService } from 'src/app/services/toast-service.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,6 +18,7 @@ import { AddProductComponent } from './add-product/add-product.component';
 import { EditProductComponent } from './edit-product/edit-product.component';
 import { DeleteProductComponent } from './delete-product/delete-product.component';
 import { ViewProductComponent } from './view-product/view-product.component';
+import { ByteService } from 'src/app/services/byte/byte.service';
 
 @Component({
   selector: 'app-product-management',
@@ -40,14 +40,14 @@ export class ProductManagementComponent implements OnInit, AfterViewInit, OnDest
   public isSearch: boolean;
   public access: any;
 
-  displayedColumns: string[] = ['view', 'username', 'fullName', 'userRole', 'nic', 'email', 'mobileNo', 'status', 'action'];
+  displayedColumns: string[] = ['view', 'mealName', 'description', 'price', 'portion', 'status','action'];
 
   constructor(
     public dialog: MatDialog,
     public toast: ToastServiceService,
     public router: Router,
     private spinner: NgxSpinnerService,
-    private userService: UserService,
+    private byteService: ByteService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private commonFunctionService: CommonFunctionService
@@ -63,17 +63,14 @@ export class ProductManagementComponent implements OnInit, AfterViewInit, OnDest
 
   initialForm() {
     this.userSearch = this.formBuilder.group({
-      username: new FormControl(''),
-      userRole: new FormControl(''),
-      status: new FormControl(''),
-      nic: new FormControl(''),
-      email: new FormControl(''),
-      mobileNo: new FormControl(''),
+      mealName: new FormControl(''),
+      price: new FormControl(''),
+      status: new FormControl('')
     });
   }
 
   prepareReferenceData(): void {
-    this.userService.getSearchData(true)
+    this.byteService.getSearchData(true)
       .subscribe((response: any) => {
         this.statusList = response.statusList;
         this.userRoleList = response.userRoleList;
@@ -117,7 +114,7 @@ export class ProductManagementComponent implements OnInit, AfterViewInit, OnDest
     if (this.isSearch) {
       searchParamMap = this.getSearchString(searchParamMap, this.searchModel);
     }
-    this.userService.getList(searchParamMap)
+    this.byteService.getList(searchParamMap)
       .subscribe((data: DataTable<User>) => {
         this.userList = data.records;
         console.log("---->",this.userList)
